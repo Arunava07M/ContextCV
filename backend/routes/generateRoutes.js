@@ -41,7 +41,7 @@ router.post('/compile', protect, async (req, res) => {
     const { pdfBuffer, latexSource } = await compileResume(templateId, resumeJson, profile);
     res.json({
       pdf: pdfBuffer.toString('base64'), 
-      tex: rawTex                        
+      tex: latexSource                        
     })
 
   } catch (err) {
