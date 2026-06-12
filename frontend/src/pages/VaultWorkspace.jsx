@@ -105,7 +105,6 @@ const VaultWorkspace = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfc] text-gray-800 font-sans pb-20">
-      {/* Top Navbar with Logo added to Breadcrumbs */}
       <nav className="bg-white border-b border-gray-200 px-8 py-3 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <Link to="/dashboard" className="text-sm font-medium text-[#387ed1] hover:underline">

@@ -11,11 +11,10 @@ const profileSchema = new mongoose.Schema({
     type: String,
     maxLength: 500
   },
-  // updated skills to handle domains
   skills: [
     {
-      domain: { type: String, required: true }, // e.g. "Frontend"
-      items: [{ type: String, trim: true }]     // e.g. ["React", "Tailwind"]
+      domain: { type: String, required: true }, 
+      items: [{ type: String, trim: true }]     
     }
   ],
   experience: [

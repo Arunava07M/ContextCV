@@ -7,7 +7,6 @@ import { getTemplate } from '../templates/index.js'
 
 const execPromise = util.promisify(exec)
 
-// 1. Safety Filter: Escapes characters that break LaTeX
 const escapeLatex = (str) => {
   if (!str) return ''
   return String(str)
@@ -23,7 +22,6 @@ const escapeLatex = (str) => {
     .replace(/~/g, '\\textasciitilde ')
 }
 
-// 2. Formatting Engine
 const buildLatexBlocks = (templateId, resumeJson, profile) => {
   let skillsBlock = ''
   let projectsBlock = ''
@@ -59,7 +57,6 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
     educationBlock = `{\\bf ${escapeLatex(profile?.education?.institution || 'University')}} \\hfill {${escapeLatex(profile?.education?.year || '2027')}}\\\\\n{${escapeLatex(profile?.education?.degree || 'Degree')}}\n`
   
   } else {
-    // Creative & Tech (Deedy) Syntax
     resumeJson.skills.forEach(skill => {
       const escapedItems = skill.items.map(item => escapeLatex(item))
       skillsBlock += `\\textbf{${escapeLatex(skill.domain)}}: \\textbullet{} ${escapedItems.join(' \\textbullet{} ')} \\\\\n`
@@ -76,7 +73,6 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
   return { firstName, lastName, safeName, contactInfo, skillsBlock, projectsBlock, educationBlock }
 }
 
-// 3. The Core Execution Engine
 export const compileResume = async (templateId, resumeJson, profile) => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'contextcv-'))
   
@@ -103,13 +99,10 @@ export const compileResume = async (templateId, resumeJson, profile) => {
       try {
         await fs.copyFile(src, path.join(tempDir, file))
       } catch (e) {
-        // Skip silently if file doesn't exist
       }
     }
 
-    // --- RENDER DEPLOYMENT LOGIC ---
     const backendDir = process.cwd()
-    // If running on Render (production), use the downloaded Linux binary. Otherwise, use global.
     const tectonicCmd = process.env.NODE_ENV === 'production' 
       ? path.join(backendDir, 'tectonic') 
       : 'tectonic'

@@ -24,7 +24,6 @@ const vaultEntrySchema = new mongoose.Schema({
   bullets: [{
     type: String 
   }],
-  // ADDED THIS: to store the mathematical representation of the project
   embedding: {
     type: [Number]
   }

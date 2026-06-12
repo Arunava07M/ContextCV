@@ -32,7 +32,6 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#fcfcfc] font-sans">
       <div className="w-full max-w-md">
         
-        {/* Logo link back to landing page */}
         <div className="flex justify-center mb-8">
           <Link to="/" className="flex items-center gap-2 cursor-pointer text-[#222222] hover:opacity-80 transition-opacity">
             <ContextLogo size={32} />

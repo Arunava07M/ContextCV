@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 
-// basic user schema, keeping it simple for now
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,14 +8,14 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, // dont want duplicate accounts with same email
+    unique: true, 
   },
   password: {
     type: String,
     required: true,
   },
 }, {
-  timestamps: true // adds createdAt and updatedAt automatically
+  timestamps: true 
 })
 
 const User = mongoose.model('User', userSchema)

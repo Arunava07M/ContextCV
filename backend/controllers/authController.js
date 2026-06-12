@@ -2,30 +2,25 @@ import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-// just a helper to make the token, keeping it short for now (7 days)
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: '7d'
   })
 }
 
-// REGISTER
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body
 
-    // basic check, dont let empty fields through
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please fill all the fields' })
     }
 
-    // check if user already exists with this email
     const existingUser = await User.findOne({ email })
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with this email' })
     }
 
-    // hash the password before saving, never store plain text
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
@@ -50,7 +45,6 @@ export const registerUser = async (req, res) => {
   }
 }
 
-// LOGIN
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
@@ -64,7 +58,6 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' })
     }
 
-    // compare entered password with hashed one in db
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' })

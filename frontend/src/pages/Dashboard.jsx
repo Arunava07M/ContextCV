@@ -31,7 +31,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfc] text-gray-800 font-sans">
-      {/* Top Navbar with Logo */}
       <nav className="bg-white border-b border-gray-200 px-8 py-3 flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 cursor-pointer">
           <ContextLogo size={24} />
@@ -47,7 +46,6 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      {/* Main Container */}
       <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="mb-8">
           <h1 className="text-2xl font-medium text-gray-900">
@@ -61,7 +59,6 @@ const Dashboard = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Core Profile Card */}
             <div className="bg-white border border-gray-200 rounded-sm p-6 relative flex flex-col h-48">
               <div>
                 <h2 className="text-lg font-medium text-gray-800">Core Profile</h2>
@@ -82,7 +79,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Career Vault Card */}
             <div className="bg-white border border-gray-200 rounded-sm p-6 relative flex flex-col h-48">
               <div>
                 <h2 className="text-lg font-medium text-gray-800">Career Vault</h2>
@@ -100,7 +96,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Resume Generator Card */}
             <div className="bg-[#f0f6ff] border border-[#387ed1] rounded-sm p-6 relative flex flex-col h-48">
               <div>
                 <h2 className="text-lg font-medium text-gray-800">Resume Generator</h2>

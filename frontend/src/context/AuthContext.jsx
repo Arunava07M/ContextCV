@@ -4,7 +4,6 @@ import api from '../api/axios'
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  // checking localStorage first so user stays logged in after refresh
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user')
     return savedUser ? JSON.parse(savedUser) : null
@@ -36,5 +35,4 @@ export const AuthProvider = ({ children }) => {
   )
 }
 
-// little hook so we dont have to write useContext(AuthContext) everywhere
 export const useAuth = () => useContext(AuthContext)

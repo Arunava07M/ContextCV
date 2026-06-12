@@ -14,20 +14,16 @@ const Generate = () => {
   const [jobDescription, setJobDescription] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState('minimalist')
   
-  // States for Module 6 (Retrieval)
   const [matches, setMatches] = useState([])
   const [profileData, setProfileData] = useState(null)
   const [loadingSearch, setLoadingSearch] = useState(false)
   
-  // States for Module 7 (AI Rewrite)
   const [generatedResume, setGeneratedResume] = useState(null)
   const [loadingAi, setLoadingAi] = useState(false)
   const [error, setError] = useState('')
 
-  // States for Module 10 (Compilation)
   const [isCompiling, setIsCompiling] = useState(false)
 
-  // 1. Step One: Search the Database
   const handleSearch = async (e) => {
     e.preventDefault()
     if (!jobDescription.trim()) return
@@ -49,7 +45,6 @@ const Generate = () => {
     }
   }
 
-  // 2. Step Two: Send to Gemini
   const handleGenerate = async () => {
     setLoadingAi(true)
     setError('')
@@ -68,21 +63,17 @@ const Generate = () => {
     }
   }
 
-  // 3. Step Three: Compile & Download BOTH files
   const handleDownload = async () => {
     setIsCompiling(true)
     setError('')
 
     try {
-      // Send the request, expecting JSON back (not blob)
       const res = await api.post('/generate/compile', {
         templateId: selectedTemplate,
         resumeJson: generatedResume,
         profile: profileData
       })
 
-      // --- 1. DOWNLOAD THE PDF ---
-      // Decode the base64 string back into raw binary PDF data
       const pdfBytes = Uint8Array.from(atob(res.data.pdf), c => c.charCodeAt(0))
       const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' })
       const pdfUrl = window.URL.createObjectURL(pdfBlob)
@@ -95,8 +86,6 @@ const Generate = () => {
       pdfLink.parentNode.removeChild(pdfLink)
       window.URL.revokeObjectURL(pdfUrl)
 
-      // --- 2. DOWNLOAD THE .TEX SOURCE CODE ---
-      // Package the raw string into a text file
       const texBlob = new Blob([res.data.tex], { type: 'text/plain' })
       const texUrl = window.URL.createObjectURL(texBlob)
       
@@ -126,7 +115,6 @@ const Generate = () => {
 
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-10">
         
-        {/* Left Side: Inputs & Config */}
         <div className="flex flex-col gap-8">
           
           <section>
@@ -176,7 +164,6 @@ const Generate = () => {
           </section>
         </div>
 
-        {/* Right Side: Results & AI Trigger */}
         <div className="bg-white border border-[#eeeeee] rounded-sm p-6 flex flex-col" style={{ height: 'calc(100vh - 150px)' }}>
           <h2 className="text-lg font-medium text-[#444444] mb-4 flex items-center justify-between border-b border-[#eeeeee] pb-3">
             Context & Generation
@@ -187,7 +174,6 @@ const Generate = () => {
               <p className="text-sm text-[#9b9b9b] mt-4">Waiting for context retrieval...</p>
             )}
 
-            {/* Step 1 Results: The Raw Context */}
             {profileData && !generatedResume && !loadingAi && (
               <div className="animate-fade-in">
                 <div className="mb-4 p-3 border border-[#eeeeee] bg-[#fdfdfd] rounded-sm flex items-center gap-3">
@@ -219,7 +205,6 @@ const Generate = () => {
               </div>
             )}
 
-            {/* Step 2 Results: The Rewritten JSON */}
             {generatedResume && (
               <div className="animate-fade-in">
                 <div className="mb-4 flex items-center gap-2">
@@ -249,7 +234,6 @@ const Generate = () => {
                   </div>
                 </div>
 
-                {/* Step 3 Compile Button */}
                 <div className="mt-8 pt-6 border-t border-[#eeeeee]">
                   <button 
                     onClick={handleDownload}

@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
-import ContextLogo from '../components/ContextLogo'; // Ensure this path is correct
+import ContextLogo from '../components/ContextLogo'; 
 
 const Home = () => {
   return (
     <div className="h-screen w-screen bg-[#fafafa] text-slate-900 font-sans overflow-hidden flex flex-col p-6 cursor-default">
       
-      {/* Header */}
       <nav className="flex justify-between items-center px-6 py-4">
-        {/* Logo and Brand */}
         <div className="flex items-center gap-2 cursor-default">
           <ContextLogo size={28} />
           <span className="text-xl font-bold tracking-tighter">ContextCV</span>
@@ -19,10 +17,8 @@ const Home = () => {
         </div>
       </nav>
 
-      {/* Main Content: Split into Hero and Feature Grid */}
       <main className="flex-1 flex flex-col justify-center gap-12 max-w-6xl mx-auto w-full">
         
-        {/* Hero Section */}
         <div className="text-center">
           <h1 className="text-7xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
             The resume, <span className="text-blue-600">optimized.</span>
@@ -37,7 +33,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Feature Grid: Grounded and Structured */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { title: "Vector-first", desc: "We don't match keywords. We match concepts for engineering edges." },
@@ -58,7 +53,6 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Subtle Footer */}
       <footer className="text-center text-slate-400 text-xs py-4 cursor-default">
         © 2026 ContextCV. Built for developers.
       </footer>

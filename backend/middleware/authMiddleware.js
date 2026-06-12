@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 
-// this checks if the request has a valid token before letting it through
 export const protect = async (req, res, next) => {
   let token
 
@@ -9,13 +8,10 @@ export const protect = async (req, res, next) => {
 
   if (authHeader && authHeader.startsWith('Bearer')) {
     try {
-      // header looks like "Bearer <token>", so split and grab the token part
       token = authHeader.split(' ')[1]
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-      // attach user to req so routes after this can use it
-      // not sending password back obviously
       req.user = await User.findById(decoded.id).select('-password')
 
       next()

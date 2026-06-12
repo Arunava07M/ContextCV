@@ -1,8 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import Groq from 'groq-sdk'
 
-// --- EXISTING EMBEDDING FUNCTION (MUST STAY GEMINI) ---
-// We keep this as Gemini because your database already has Gemini vectors.
 export const generateEmbedding = async (text) => {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
@@ -15,11 +13,9 @@ export const generateEmbedding = async (text) => {
   }
 }
 
-// --- NEW AI REWRITE FUNCTION (NOW POWERED BY GROQ) ---
 export const generateTailoredResume = async (jobDescription, profile, matches) => {
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-  // Groq prefers a strict separation of System and User instructions
   const systemPrompt = `
   You are an elite ATS-aware resume writer.
   Your job is to take the provided Job Description, Core Profile, and Top Projects, and rewrite the user's data to perfectly match the role while remaining 100% truthful.
@@ -57,7 +53,6 @@ export const generateTailoredResume = async (jobDescription, profile, matches) =
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      // Calling Groq's high-end Llama 3.3 model natively in JSON mode
       const chatCompletion = await groq.chat.completions.create({
         messages: [
           { role: 'system', content: systemPrompt },
@@ -72,7 +67,6 @@ export const generateTailoredResume = async (jobDescription, profile, matches) =
     } catch (err) {
       console.log(`[Groq API] Error on attempt ${attempt}:`, err.message)
       
-      // Handle rate limits or service unavailable errors from Groq
       if (err.status === 429 || err.status === 503 || err.message?.includes('429') || err.message?.includes('503')) {
         if (attempt < maxRetries) {
           console.log(`[Groq API] Network busy. Retrying in ${delay / 1000} seconds...`)

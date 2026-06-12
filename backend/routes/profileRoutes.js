@@ -42,7 +42,6 @@ router.post('/', protect, async (req, res) => {
       profile = await Profile.findOneAndUpdate(
         { user: req.user.id },
         { $set: profileFields },
-        // FIXED MONGOOSE WARNING HERE
         { returnDocument: 'after' }
       )
       return res.json(profile)

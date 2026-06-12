@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import VaultEntry from '../models/VaultEntry.js'
-import Profile from '../models/Profile.js' // Added Profile import
+import Profile from '../models/Profile.js' 
 import { protect } from '../middleware/authMiddleware.js'
 import { generateEmbedding } from '../utils/gemini.js'
 
@@ -12,15 +12,12 @@ router.post('/search', protect, async (req, res) => {
     const { jobDescription } = req.body
     if (!jobDescription) return res.status(400).json({ message: 'Job description is required' })
 
-    // 1. Fetch the user's Core Profile (Completing Module 6)
     const profile = await Profile.findOne({ user: req.user.id })
     if (!profile) return res.status(404).json({ message: 'Profile not found. Please create one first.' })
 
-    // 2. Turn the Job Description into math
     const jdEmbedding = await generateEmbedding(jobDescription)
     if (!jdEmbedding) return res.status(500).json({ message: 'Failed to analyze Job Description' })
 
-    // 3. Perform the Atlas Vector Search
     const matches = await VaultEntry.aggregate([
       {
         "$vectorSearch": {
@@ -47,7 +44,6 @@ router.post('/search', protect, async (req, res) => {
       }
     ])
 
-    // Return BOTH Profile and Matches
     res.json({ profile, matches })
   } catch (err) {
     console.log('Search error:', err.message)
@@ -55,7 +51,6 @@ router.post('/search', protect, async (req, res) => {
   }
 })
 
-// --- EXISTING CRUD ROUTES ---
 router.get('/', protect, async (req, res) => {
   try {
     const entries = await VaultEntry.find({ user: req.user.id }).select('-embedding').sort({ createdAt: -1 })

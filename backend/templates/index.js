@@ -1,13 +1,13 @@
 import { executiveTemplate } from './executive.js'
 import { minimalistTemplate } from './minimalist.js'
 import { creativeTemplate } from './creative.js'
-import { techTemplate } from './tech.js' // Added the import
+import { techTemplate } from './tech.js' 
 
 const templateRegistry = {
   executive: executiveTemplate,
   minimalist: minimalistTemplate,
-  modern: minimalistTemplate, // Final fallback
-  tech: techTemplate,         // Registered the new template!
+  modern: minimalistTemplate, 
+  tech: techTemplate,         
   creative: creativeTemplate 
 }
 

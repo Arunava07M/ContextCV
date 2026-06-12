@@ -140,7 +140,6 @@ const ProfileWorkspace = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfc] text-gray-800 font-sans pb-20">
-      {/* Top Navbar with Logo added to Breadcrumbs */}
       <nav className="bg-white border-b border-gray-200 px-8 py-3 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <Link to="/dashboard" className="text-sm font-medium text-[#387ed1] hover:underline">
@@ -157,7 +156,6 @@ const ProfileWorkspace = () => {
         </button>
       </nav>
 
-      {/* Main Container */}
       <div className="max-w-4xl mx-auto px-6 py-10">
         <div className="flex justify-between items-center border-b border-gray-200 pb-4 mb-8">
           <div>
@@ -183,7 +181,6 @@ const ProfileWorkspace = () => {
 
         <form onSubmit={handleSave} className="space-y-8">
           
-          {/* Summary */}
           <div className="bg-white border border-gray-200 rounded-sm p-6">
             <h2 className="text-sm font-medium text-gray-700 uppercase tracking-wider mb-4">Professional Summary</h2>
             <textarea
@@ -195,7 +192,6 @@ const ProfileWorkspace = () => {
             />
           </div>
 
-          {/* Core Technical Skills */}
           <div className="bg-white border border-gray-200 rounded-sm p-6">
             <div className="flex justify-between items-center mb-4">
               <div>
@@ -247,7 +243,6 @@ const ProfileWorkspace = () => {
             </div>
           </div>
 
-          {/* Experience Section */}
           <div className="bg-white border border-gray-200 rounded-sm p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-sm font-medium text-gray-700 uppercase tracking-wider">Experience</h2>
@@ -298,7 +293,6 @@ const ProfileWorkspace = () => {
             </div>
           </div>
 
-          {/* Education Section */}
           <div className="bg-white border border-gray-200 rounded-sm p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-sm font-medium text-gray-700 uppercase tracking-wider">Education</h2>
