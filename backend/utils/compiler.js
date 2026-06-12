@@ -1,9 +1,10 @@
-import CloudConvert from 'cloudconvert';
+import convertapi from 'convertapi';
 import AdmZip from 'adm-zip';
 import path from 'path';
 import { getTemplate } from '../templates/index.js';
 
-const cloudConvert = new CloudConvert(process.env.CLOUDCONVERT_API_KEY);
+// Initialize with your new ConvertAPI secret
+const convertApi = convertapi(process.env.CONVERTAPI_SECRET);
 
 const TEMPLATE_REGISTRY = {
   'minimalist': { files: [] },
@@ -79,11 +80,6 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
 };
 
 export const compileResume = async (templateId, resumeJson, profile) => {
-  // --- DEBUGGING LOGS ---
-  console.log('API Key present:', !!process.env.CLOUDCONVERT_API_KEY);
-  console.log('API Key length:', process.env.CLOUDCONVERT_API_KEY?.length);
-  // ----------------------
-
   const templatesDir = path.join(process.cwd(), 'templates');
   const zip = new AdmZip();
 
@@ -110,36 +106,21 @@ export const compileResume = async (templateId, resumeJson, profile) => {
   }
 
   try {
-    let job = await cloudConvert.jobs.create({
-      tasks: {
-        'import-zip': { operation: 'import/upload' },
-        'convert-tex': {
-          operation: 'convert',
-          input: 'import-zip',
-          input_format: 'tex',
-          output_format: 'pdf',
-          engine: 'xelatex'
-        },
-        'export-pdf': {
-          operation: 'export/url',
-          input: 'convert-tex'
-        }
+    // Send the entire ZIP to ConvertAPI
+    const result = await convertApi.convert('pdf', {
+      File: {
+        value: zip.toBuffer(),
+        name: 'resume.zip'
       }
-    });
+    }, 'zip');
 
-    const uploadTask = job.tasks.filter(t => t.name === 'import-zip')[0];
-    await cloudConvert.tasks.upload(uploadTask, zip.toBuffer(), 'resume.zip');
+    // Get the result file
+    const file = result.getFile();
+    const pdfBuffer = await file.getContent();
 
-    job = await cloudConvert.jobs.wait(job.id);
-    
-    const exportTask = job.tasks.filter(t => t.name === 'export-pdf')[0];
-    const file = exportTask.result.files[0];
-    
-    const response = await cloudConvert.request('GET', file.url);
-    
-    return { pdfBuffer: Buffer.from(response.data) };
+    return { pdfBuffer };
   } catch (error) {
-    console.error('CloudConvert Error:', error);
+    console.error('ConvertAPI Error:', error);
     throw new Error('PDF Generation failed: ' + error.message);
   }
 };
