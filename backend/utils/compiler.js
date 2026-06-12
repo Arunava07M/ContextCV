@@ -79,6 +79,11 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
 };
 
 export const compileResume = async (templateId, resumeJson, profile) => {
+  // --- DEBUGGING LOGS ---
+  console.log('API Key present:', !!process.env.CLOUDCONVERT_API_KEY);
+  console.log('API Key length:', process.env.CLOUDCONVERT_API_KEY?.length);
+  // ----------------------
+
   const templatesDir = path.join(process.cwd(), 'templates');
   const zip = new AdmZip();
 
