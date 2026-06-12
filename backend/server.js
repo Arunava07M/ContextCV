@@ -12,7 +12,12 @@ dotenv.config()
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}))
+
 app.use(express.json())
 
 mongoose.connect(process.env.MONGO_URI)
@@ -24,11 +29,9 @@ app.use('/api/profile', profileRoutes)
 app.use('/api/vault', vaultRoutes)
 app.use('/api/generate', generateRoutes) 
 
-
 app.get('/', (req, res) => {
   res.send('ContextCV API is running...')
 })
-
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
