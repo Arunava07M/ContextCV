@@ -38,8 +38,7 @@ router.post('/compile', protect, async (req, res) => {
       return res.status(400).json({ message: 'Missing data required for compilation.' })
     }
 
-    const { pdfBuffer, rawTex } = await compileResume(templateId, resumeJson, profile)
-
+    const { pdfBuffer, latexSource } = await compileResume(templateId, resumeJson, profile);
     res.json({
       pdf: pdfBuffer.toString('base64'), 
       tex: rawTex                        
