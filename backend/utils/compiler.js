@@ -99,12 +99,13 @@ export const compileResume = async (templateId, resumeJson, profile) => {
       try {
         await fs.copyFile(src, path.join(tempDir, file))
       } catch (e) {
+        // Skip
       }
     }
 
-    const backendDir = process.cwd()
+    // POINT TO CARGO BINARY
     const tectonicCmd = process.env.NODE_ENV === 'production' 
-      ? path.join(backendDir, 'tectonic') 
+      ? path.join(os.homedir(), '.cargo', 'bin', 'tectonic') 
       : 'tectonic'
 
     console.log(`[Tectonic] Executing: ${tectonicCmd} in ${tempDir}...`)

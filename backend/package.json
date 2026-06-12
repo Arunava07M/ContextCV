@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "build": "curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh"
+    "build": "apt-get update && apt-get install -y pkg-config libssl-dev gcc g++ && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && . $HOME/.cargo/env && cargo install tectonic"
   },
   "keywords": [],
   "author": "",
