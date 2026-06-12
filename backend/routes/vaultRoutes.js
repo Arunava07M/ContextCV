@@ -44,7 +44,13 @@ router.post('/search', protect, async (req, res) => {
       }
     ])
 
-    res.json({ profile, matches })
+    const profileWithContact = {
+      ...profile.toObject(),
+      name: req.user.name,
+      email: req.user.email
+    }
+
+    res.json({ profile: profileWithContact, matches })
   } catch (err) {
     console.log('Search error:', err.message)
     res.status(500).json({ message: 'Search failed' })

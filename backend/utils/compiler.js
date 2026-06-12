@@ -33,7 +33,13 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
   const safeName = escapeLatex(profile?.name || 'Your Name')
   const firstName = safeName.split(' ')[0]
   const lastName = safeName.split(' ').slice(1).join(' ')
-  const contactInfo = escapeLatex('email@example.com | github.com/user | linkedin.com/in/user')
+
+  const contactInfo = escapeLatex(profile?.email || 'your.email@example.com')
+
+
+  const educationEntries = (profile?.education && profile.education.length > 0)
+    ? profile.education
+    : [{ institution: 'University', degree: 'Degree', fieldOfStudy: '', yearOfPassing: '' }]
 
   if (templateId === 'minimalist') {
     resumeJson.skills.forEach(skill => {
@@ -45,7 +51,13 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
       proj.bullets.forEach(b => { projectsBlock += `\\resumeItem{${escapeLatex(b)}}\n` })
       projectsBlock += `\\resumeItemListEnd\n`
     })
-    educationBlock = `\\resumeSubheading{${escapeLatex(profile?.education?.institution || 'University')}}{}{${escapeLatex(profile?.education?.degree || 'Degree')}}{${escapeLatex(profile?.education?.year || '2027')}}`
+
+    educationEntries.forEach(edu => {
+      const degreeLine = edu.fieldOfStudy
+        ? `${escapeLatex(edu.degree || 'Degree')}, ${escapeLatex(edu.fieldOfStudy)}`
+        : escapeLatex(edu.degree || 'Degree')
+      educationBlock += `\\resumeSubheading{${escapeLatex(edu.institution || 'University')}}{${escapeLatex(String(edu.yearOfPassing || ''))}}{${degreeLine}}{}\n`
+    })
 
   } else if (templateId === 'executive') {
     resumeJson.skills.forEach(skill => {
@@ -57,7 +69,13 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
       proj.bullets.forEach(b => { projectsBlock += `\\item ${escapeLatex(b)}\n` })
       projectsBlock += `\\end{rSubsection}\n`
     })
-    educationBlock = `{\\bf ${escapeLatex(profile?.education?.institution || 'University')}} \\hfill {${escapeLatex(profile?.education?.year || '2027')}}\\\\\n{${escapeLatex(profile?.education?.degree || 'Degree')}}\n`
+
+    educationEntries.forEach(edu => {
+      const degreeLine = edu.fieldOfStudy
+        ? `${escapeLatex(edu.degree || 'Degree')}, ${escapeLatex(edu.fieldOfStudy)}`
+        : escapeLatex(edu.degree || 'Degree')
+      educationBlock += `{\\bf ${escapeLatex(edu.institution || 'University')}} \\hfill {${escapeLatex(String(edu.yearOfPassing || ''))}}\\\\\n{${degreeLine}}\\\\[4pt]\n`
+    })
 
   } else {
     resumeJson.skills.forEach(skill => {
@@ -70,7 +88,13 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
       proj.bullets.forEach(b => { projectsBlock += `\\item ${escapeLatex(b)}\n` })
       projectsBlock += `\\end{tightemize}\\sectionsep\n`
     })
-    educationBlock = `\\runsubsection{${escapeLatex(profile?.education?.institution || 'University')}}\n\\descript{| ${escapeLatex(profile?.education?.degree || 'Degree')}}\n\\location{Expected: ${escapeLatex(profile?.education?.year || '2027')}}\n`
+
+    educationEntries.forEach(edu => {
+      const degreeLine = edu.fieldOfStudy
+        ? `${escapeLatex(edu.degree || 'Degree')}, ${escapeLatex(edu.fieldOfStudy)}`
+        : escapeLatex(edu.degree || 'Degree')
+      educationBlock += `\\runsubsection{${escapeLatex(edu.institution || 'University')}}\n\\descript{| ${degreeLine}}\n\\location{${escapeLatex(String(edu.yearOfPassing || ''))}}\n\\sectionsep\n`
+    })
   }
 
   return { firstName, lastName, safeName, contactInfo, skillsBlock, projectsBlock, educationBlock }
