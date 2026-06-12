@@ -1,0 +1,80 @@
+# =========================
+# 1. DEPENDENCIES (Frontend & Backend)
+# =========================
+node_modules/
+/.pnp
+.pnp.js
+
+# =========================
+# 2. ENVIRONMENT VARIABLES (CRITICAL)
+# =========================
+# NEVER commit your secret API keys, database URIs, or JWT secrets!
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# =========================
+# 3. COMPILER & BINARIES (Backend)
+# =========================
+# Ignore the Tectonic Linux binary that Render downloads during the build step
+tectonic
+# Ignore any other local binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# =========================
+# 4. GENERATED FILES (Backend)
+# =========================
+# Prevent accidental uploads of generated resumes or LaTeX junk files
+*.pdf
+*.tex
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc
+
+# =========================
+# 5. BUILD OUTPUTS (Frontend)
+# =========================
+# Ignore the compiled React/Vite production files
+/dist
+/build
+/.next/
+/out/
+
+# =========================
+# 6. LOG FILES
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# 7. OS & SYSTEM FILES
+# =========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# =========================
+# 8. IDE & EDITOR FOLDERS
+# =========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
