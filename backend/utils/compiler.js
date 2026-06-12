@@ -1,6 +1,7 @@
 import convertapi from 'convertapi';
 import AdmZip from 'adm-zip';
 import path from 'path';
+import fs from 'fs';
 import { getTemplate } from '../templates/index.js';
 
 // Initialize with your new ConvertAPI secret
@@ -105,16 +106,19 @@ export const compileResume = async (templateId, resumeJson, profile) => {
     });
   }
 
+  // Create a temporary path on the Render server
+  const tempZipPath = `/tmp/resume-${Date.now()}.zip`;
+
   try {
-    // Send the entire ZIP to ConvertAPI
+    // 1. Write the buffer to a temp file
+    fs.writeFileSync(tempZipPath, zip.toBuffer());
+
+    // 2. Pass the file path (string) to ConvertAPI
     const result = await convertApi.convert('pdf', {
-      File: {
-        value: zip.toBuffer(),
-        name: 'resume.zip'
-      }
+      File: tempZipPath
     }, 'zip');
 
-    // Get the result file
+    // 3. Get the result file buffer
     const file = result.getFile();
     const pdfBuffer = await file.getContent();
 
@@ -122,5 +126,10 @@ export const compileResume = async (templateId, resumeJson, profile) => {
   } catch (error) {
     console.error('ConvertAPI Error:', error);
     throw new Error('PDF Generation failed: ' + error.message);
+  } finally {
+    // 4. Always clean up the temp file
+    if (fs.existsSync(tempZipPath)) {
+      fs.unlinkSync(tempZipPath);
+    }
   }
 };
