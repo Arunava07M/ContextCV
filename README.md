@@ -2,7 +2,7 @@
   <img src="frontend/public/logo.svg" alt="ContextCV Logo" width="80" height="80">
   
   <h1>ContextCV</h1>
-  <p><strong>An AI resume generator that builds a tailored, ATS-friendly resume (and its LaTeX source) for every job you apply to.</strong></p>
+  <p><strong>A resume generator that builds a tailored, ATS friendly resume (and its LaTeX source) for every job you apply to.</strong></p>
   <p>
     <a href="https://contextcv.vercel.app"><strong>https://contextcv.vercel.app</strong></a>
   </p>
