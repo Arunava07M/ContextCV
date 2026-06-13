@@ -11,6 +11,8 @@ const ProfileWorkspace = () => {
   const [profile, setProfile] = useState({
     summary: '',
     skills: [], 
+    linkedin: '',
+    github: '',
     experience: [],
     education: []
   });
@@ -191,6 +193,31 @@ const ProfileWorkspace = () => {
               className="w-full text-sm px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-[#387ed1] focus:ring-1 focus:ring-[#387ed1] transition-colors resize-none"
             />
           </div>
+          <div className="bg-white border border-gray-200 rounded-sm p-6">
+            <h2 className="text-sm font-medium text-gray-700 uppercase tracking-wider mb-4">Links</h2>
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="text-xs text-gray-500 mb-1 block">LinkedIn URL</label>
+                    <input
+                        type="text"
+                        value={profile.linkedin}
+                        onChange={(e) => setProfile({ ...profile, linkedin: e.target.value })}
+                        placeholder="https://linkedin.com/in/yourname"
+                        className="w-full text-sm px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-[#387ed1]"
+                    />
+                </div>
+                <div>
+                    <label className="text-xs text-gray-500 mb-1 block">GitHub URL</label>
+                    <input
+                        type="text"
+                        value={profile.github}
+                        onChange={(e) => setProfile({ ...profile, github: e.target.value })}
+                        placeholder="https://github.com/yourname"
+                        className="w-full text-sm px-3 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-[#387ed1]"
+                    />
+                </div>
+             </div>
+           </div>
 
           <div className="bg-white border border-gray-200 rounded-sm p-6">
             <div className="flex justify-between items-center mb-4">

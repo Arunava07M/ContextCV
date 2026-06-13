@@ -35,7 +35,21 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
   const firstName = safeName.split(' ')[0]
   const lastName = safeName.split(' ').slice(1).join(' ')
 
-  const contactInfo = escapeLatex(profile?.email || 'your.email@example.com')
+  //const contactInfo = escapeLatex(profile?.email || 'your.email@example.com')
+  const contactParts = []
+
+  const emailAddr = profile?.email || 'your.email@example.com'
+  contactParts.push(`\\href{mailto:${emailAddr}}{${escapeLatex(emailAddr)}}`)
+
+  if (profile?.linkedin) {
+    contactParts.push(`\\href{${profile.linkedin}}{LinkedIn}`)
+  }
+
+  if (profile?.github) {
+    contactParts.push(`\\href{${profile.github}}{GitHub}`)
+  }
+
+  const contactInfo = contactParts.join(' \\ $|$ \\ ')
 
   const educationEntries = (profile?.education && profile.education.length > 0)
     ? profile.education

@@ -11,6 +11,14 @@ const profileSchema = new mongoose.Schema({
     type: String,
     maxLength: 500
   },
+  linkedin: {
+    type: String,
+    default: ''
+  },
+  github: {
+    type: String,
+    default: ''
+  },
   skills: [
     {
       domain: { type: String, required: true }, 

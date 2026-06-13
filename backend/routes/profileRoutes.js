@@ -18,7 +18,7 @@ router.get('/', protect, async (req, res) => {
 })
 
 router.post('/', protect, async (req, res) => {
-  const { summary, skills, experience, education } = req.body
+  const { summary, skills, experience, education, linkedin, github } = req.body
 
   const formattedSkills = (skills || []).map(skillGroup => ({
     domain: skillGroup.domain,
@@ -30,6 +30,8 @@ router.post('/', protect, async (req, res) => {
   const profileFields = {
     user: req.user.id,
     summary,
+    linkedin: linkedin || '',
+    github: github || '',
     skills: formattedSkills,
     experience: experience || [],
     education: education || []
