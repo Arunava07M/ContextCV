@@ -7,8 +7,9 @@ export const executiveTemplate = `
 
 \\name{{{NAME}}}
 
-% Contact Information Block
-{{CONTACT_INFO}}
+% wrapping in \\address so resume.cls prints this centered below the name
+% instead of dumping raw text in the top-left corner
+\\address{{{CONTACT_INFO}}}
 
 \\begin{document}
 

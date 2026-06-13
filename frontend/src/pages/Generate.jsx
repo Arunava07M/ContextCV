@@ -4,10 +4,8 @@ import api from '../api/axios'
 
 const templates = [
   { id: 'minimalist', name: 'Minimalist', desc: 'Clean lines, standard ATS format' },
-  { id: 'modern', name: 'Modern', desc: 'Slightly bold headers, contemporary' },
-  { id: 'tech', name: 'Tech-Focused', desc: 'Prioritizes skills and stack visibility' },
-  { id: 'executive', name: 'Executive', desc: 'Traditional, impact-driven layout' },
-  { id: 'creative', name: 'Creative', desc: 'Subtle two-column structure' }
+  { id: 'modern', name: 'Modern', desc: 'Two-column skills table, icon-based contact' },
+  { id: 'executive', name: 'Executive', desc: 'Traditional, impact-driven layout' }
 ]
 
 const Generate = () => {

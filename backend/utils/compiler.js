@@ -3,11 +3,12 @@ import path from 'path'
 import fs from 'fs'
 import { getTemplate } from '../templates/index.js'
 
+// dropped creative and tech entirely, just minimalist/executive/modern now
+// all three work fine on plain pdflatex, no fontspec headaches
 const TEMPLATE_REGISTRY = {
   'minimalist': { files: [], compiler: 'pdflatex' },
   'executive': { files: ['resume.cls'], compiler: 'pdflatex' },
-  'creative': { files: ['deedy-resume-openfont.cls'], compiler: 'pdflatex' },
-  'tech': { files: ['deedy-resume-openfont.cls'], compiler: 'pdflatex' }
+  'modern': { files: [], compiler: 'pdflatex' }
 }
 
 const escapeLatex = (str) => {
@@ -77,22 +78,23 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
     })
 
   } else {
+    // modern template (and fallback default)
     resumeJson.skills.forEach(skill => {
       const escapedItems = skill.items.map(item => escapeLatex(item))
-      skillsBlock += `\\textbf{${escapeLatex(skill.domain)}}: \\textbullet{} ${escapedItems.join(' \\textbullet{} ')} \\\\\n`
+      skillsBlock += `\\textbf{${escapeLatex(skill.domain)}} & ${escapedItems.join(', ')} \\\\\n`
     })
+
     resumeJson.projects.forEach(proj => {
-      const escapedTech = (proj.techStack || []).map(t => escapeLatex(t)).join(', ') || 'Tech'
-      projectsBlock += `\\runsubsection{${escapeLatex(proj.title)}}\n\\descript{| ${escapedTech}}\n\\begin{tightemize}\n`      
+      const techStr = (proj.techStack || []).map(t => escapeLatex(t)).join(', ') || 'Tech'
+      projectsBlock += `\\begin{joblong}{${escapeLatex(proj.title)} $|$ \\normalfont{\\textit{${techStr}}}}{}\n`
       proj.bullets.forEach(b => { projectsBlock += `\\item ${escapeLatex(b)}\n` })
-      projectsBlock += `\\end{tightemize}\\sectionsep\n`
+      projectsBlock += `\\end{joblong}\n\\vspace{2mm}\n`
     })
 
     educationEntries.forEach(edu => {
-      const degreeLine = edu.fieldOfStudy
-        ? `${escapeLatex(edu.degree || 'Degree')}, ${escapeLatex(edu.fieldOfStudy)}`
-        : escapeLatex(edu.degree || 'Degree')
-      educationBlock += `\\runsubsection{${escapeLatex(edu.institution || 'University')}}\n\\descript{| ${degreeLine}}\n\\location{${escapeLatex(String(edu.yearOfPassing || ''))}}\n\\sectionsep\n`
+      const fieldStr = edu.fieldOfStudy ? `, ${escapeLatex(edu.fieldOfStudy)}` : ''
+      const yearStr = edu.yearOfPassing ? escapeLatex(String(edu.yearOfPassing)) : ''
+      educationBlock += `${yearStr} & ${escapeLatex(edu.degree || 'Degree')}${fieldStr} \\\\\n& \\textbf{${escapeLatex(edu.institution || 'University')}} \\\\\n`
     })
   }
 
@@ -122,7 +124,6 @@ export const compileResume = async (templateId, resumeJson, profile) => {
     }
   ]
 
-  // falling back to pdflatex + no extra files if templateId is somehow unknown
   const config = TEMPLATE_REGISTRY[templateId] || { files: [], compiler: 'pdflatex' }
 
   if (config.files && config.files.length > 0) {
@@ -138,7 +139,7 @@ export const compileResume = async (templateId, resumeJson, profile) => {
 
   try {
     const response = await axios.post('https://latex.ytotech.com/builds/sync', {
-      compiler: config.compiler, // pdflatex for minimalist/executive, xelatex for creative/tech
+      compiler: config.compiler,
       resources: resources
     }, {
       responseType: 'arraybuffer', 
