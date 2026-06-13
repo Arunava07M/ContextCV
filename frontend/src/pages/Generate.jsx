@@ -4,7 +4,7 @@ import api from '../api/axios'
 
 const templates = [
   { id: 'minimalist', name: 'Minimalist', desc: 'Clean lines, standard ATS format' },
-  { id: 'modern', name: 'Modern', desc: 'Bold, visually balanced, and contemporary design' },
+  { id: 'modern', name: 'Modern', desc: 'Bold, visually balanced' },
   { id: 'executive', name: 'Executive', desc: 'Traditional, impact driven layout' }
 ]
 
