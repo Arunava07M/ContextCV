@@ -3,11 +3,13 @@ import path from 'path'
 import fs from 'fs'
 import { getTemplate } from '../templates/index.js'
 
+// adding a compiler field per template now
+// deedy based templates (creative/tech) use fontspec which needs xelatex, not pdflatex
 const TEMPLATE_REGISTRY = {
-  'minimalist': { files: [] },
-  'executive': { files: ['resume.cls'] },
-  'creative': { files: ['deedy-resume-openfont.cls'] },
-  'tech': { files: ['deedy-resume-openfont.cls'] }
+  'minimalist': { files: [], compiler: 'pdflatex' },
+  'executive': { files: ['resume.cls'], compiler: 'pdflatex' },
+  'creative': { files: ['deedy-resume-openfont.cls'], compiler: 'xelatex' },
+  'tech': { files: ['deedy-resume-openfont.cls'], compiler: 'xelatex' }
 }
 
 const escapeLatex = (str) => {
@@ -35,7 +37,6 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
   const lastName = safeName.split(' ').slice(1).join(' ')
 
   const contactInfo = escapeLatex(profile?.email || 'your.email@example.com')
-
 
   const educationEntries = (profile?.education && profile.education.length > 0)
     ? profile.education
@@ -78,6 +79,7 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
     })
 
   } else {
+    // creative and tech templates (deedy class)
     resumeJson.skills.forEach(skill => {
       const escapedItems = skill.items.map(item => escapeLatex(item))
       skillsBlock += `\\textbf{${escapeLatex(skill.domain)}}: \\textbullet{} ${escapedItems.join(' \\textbullet{} ')} \\\\\n`
@@ -123,8 +125,10 @@ export const compileResume = async (templateId, resumeJson, profile) => {
     }
   ]
 
-  const config = TEMPLATE_REGISTRY[templateId]
-  if (config && config.files && config.files.length > 0) {
+  // falling back to pdflatex + no extra files if templateId is somehow unknown
+  const config = TEMPLATE_REGISTRY[templateId] || { files: [], compiler: 'pdflatex' }
+
+  if (config.files && config.files.length > 0) {
     config.files.forEach(file => {
       const filePath = path.join(templatesDir, file)
       const fileContent = fs.readFileSync(filePath, 'utf8')
@@ -137,7 +141,7 @@ export const compileResume = async (templateId, resumeJson, profile) => {
 
   try {
     const response = await axios.post('https://latex.ytotech.com/builds/sync', {
-      compiler: 'pdflatex',
+      compiler: config.compiler, // pdflatex for minimalist/executive, xelatex for creative/tech
       resources: resources
     }, {
       responseType: 'arraybuffer', 
