@@ -1,4 +1,10 @@
 <div align="center">
+  <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50" fill="#2563eb" />
+    <path d="M 50 30 L 25 70 L 50 55 Z" fill="#ffffff" />
+    <path d="M 50 30 L 75 70 L 50 55 Z" fill="#ffffff" />
+  </svg>
+  
   <h1>ContextCV</h1>
   <p><strong>An AI resume generator that builds a tailored, ATS-friendly resume (and its LaTeX source) for every job you apply to.</strong></p>
   <p>
