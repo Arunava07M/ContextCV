@@ -3,13 +3,11 @@ import path from 'path'
 import fs from 'fs'
 import { getTemplate } from '../templates/index.js'
 
-// adding a compiler field per template now
-// deedy based templates (creative/tech) use fontspec which needs xelatex, not pdflatex
 const TEMPLATE_REGISTRY = {
   'minimalist': { files: [], compiler: 'pdflatex' },
   'executive': { files: ['resume.cls'], compiler: 'pdflatex' },
-  'creative': { files: ['deedy-resume-openfont.cls'], compiler: 'xelatex' },
-  'tech': { files: ['deedy-resume-openfont.cls'], compiler: 'xelatex' }
+  'creative': { files: ['deedy-resume-openfont.cls'], compiler: 'pdflatex' },
+  'tech': { files: ['deedy-resume-openfont.cls'], compiler: 'pdflatex' }
 }
 
 const escapeLatex = (str) => {
@@ -79,14 +77,13 @@ const buildLatexBlocks = (templateId, resumeJson, profile) => {
     })
 
   } else {
-    // creative and tech templates (deedy class)
     resumeJson.skills.forEach(skill => {
       const escapedItems = skill.items.map(item => escapeLatex(item))
       skillsBlock += `\\textbf{${escapeLatex(skill.domain)}}: \\textbullet{} ${escapedItems.join(' \\textbullet{} ')} \\\\\n`
     })
     resumeJson.projects.forEach(proj => {
       const escapedTech = (proj.techStack || []).map(t => escapeLatex(t)).join(', ') || 'Tech'
-      projectsBlock += `\\runsubsection{${escapeLatex(proj.title)}}\n\\descript{| ${escapedTech}}\n\\location{}\n\\begin{tightemize}\n`
+      projectsBlock += `\\runsubsection{${escapeLatex(proj.title)}}\n\\descript{| ${escapedTech}}\n\\begin{tightemize}\n`      
       proj.bullets.forEach(b => { projectsBlock += `\\item ${escapeLatex(b)}\n` })
       projectsBlock += `\\end{tightemize}\\sectionsep\n`
     })

@@ -19,10 +19,13 @@
 \definecolor{headings}{HTML}{6A6A6A}
 \definecolor{subheadings}{HTML}{333333}
 
-\usepackage{fontspec}
-
-\setmainfont[Color=primary, BoldFont=Helvetica-Bold, ItalicFont=Helvetica-Oblique]{Helvetica}
-\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Arial}
+% swapped fontspec + Helvetica/Arial for tgheros
+% tgheros is a free Helvetica clone that ships with every TeX Live install
+% this also means we no longer need xelatex, plain pdflatex works fine
+\usepackage[T1]{fontenc}
+\usepackage{tgheros}
+\renewcommand*\familydefault{\sfdefault}
+\AtBeginDocument{\color{primary}}
 
 \usepackage[absolute]{textpos}
 \usepackage[UKenglish]{isodate}
