@@ -3,8 +3,6 @@ import path from 'path'
 import fs from 'fs'
 import { getTemplate } from '../templates/index.js'
 
-// dropped creative and tech entirely, just minimalist/executive/modern now
-// all three work fine on plain pdflatex, no fontspec headaches
 const TEMPLATE_REGISTRY = {
   'minimalist': { files: [], compiler: 'pdflatex' },
   'executive': { files: ['resume.cls'], compiler: 'pdflatex' },
