@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import api from '../api/axios'
 
 const templates = [
-  { id: 'minimalist', name: 'Minimalist'/*, desc: 'Clean lines, standard ATS format'*/ },
-  { id: 'modern', name: 'Modern'/*, desc: 'Two-column skills table, icon-based contact'*/ },
-  { id: 'executive', name: 'Executive'/*, desc: 'Traditional, impact-driven layout'*/ }
+  { id: 'minimalist', name: 'Minimalist', desc: 'Clean lines, standard ATS format' },
+  { id: 'modern', name: 'Modern', desc: 'Bold, visually balanced, and contemporary design' },
+  { id: 'executive', name: 'Executive', desc: 'Traditional, impact driven layout' }
 ]
 
 const Generate = () => {
