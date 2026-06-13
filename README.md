@@ -8,20 +8,20 @@
 
 ## Overview
 
-ContextCV is a project I built to stop the cycle of manually rewriting my resume for every single job application. The idea is simple: instead of editing one resume file over and over, you build a "Career Vault" once — every project, internship, and hackathon you've ever worked on goes in there.
+ContextCV is a project I built to stop the cycle of manually rewriting my resume for every single job application. The idea is simple: instead of editing one resume file over and over, you build a "Career Vault" once for every project, internship, and hackathon you've ever worked on goes in there.
 
-When you find a job you want to apply to, you paste in the job description and pick a template. ContextCV then does the rest: it searches your vault for the experiences that actually match what the job is asking for, rewrites those bullet points around the job's keywords using AI, and compiles everything into a clean PDF resume — along with the raw LaTeX source if you want to tweak it further on Overleaf.
+When you find a job you want to apply to, you paste in the job description and pick a template. ContextCV then does the rest: it searches your vault for the experiences that actually match what the job is asking for, rewrites those bullet points around the job's keywords using AI, and compiles everything into a clean PDF resume along with the raw LaTeX source if you want to tweak it further on Overleaf.
 
 ## How it Works
 
 ### 1. The Career Vault (Vector Search)
-Every entry you add to your vault — projects, work experience, hackathons — gets converted into a vector embedding using Google's `gemini-embedding-001` model and stored in MongoDB Atlas with a Vector Search index. This means your vault isn't just a list, it's searchable by *meaning*, not just keywords.
+Every entry you add to your vault which are projects, work experience, hackathons gets converted into a vector embedding using Google's `gemini-embedding-001` model and stored in MongoDB Atlas with a Vector Search index. This means your vault isn't just a list, it's searchable by *meaning*, not just keywords.
 
 ### 2. Matching Your Experience to the Job (RAG)
 When you paste a job description, the backend generates an embedding for it too, then runs a MongoDB `$vectorSearch` query against your vault to pull out the projects that are most relevant to that specific job — instead of dumping your entire history at the AI and hoping for the best.
 
 ### 3. AI Resume Rewriting + Validation
-Your core profile, the matched projects, and the job description get sent to Groq's `llama-3.3-70b-versatile` model, which rewrites your bullet points to highlight the skills and keywords the job is looking for — without inventing new experience. Before the backend trusts this response, it's checked against a strict Zod schema, so if the AI ever returns malformed JSON, it gets caught and retried instead of crashing the server.
+Your core profile, the matched projects, and the job description get sent to Groq's `llama-3.3-70b-versatile` model, which rewrites your bullet points to highlight the skills and keywords the job is looking for without inventing new experience. Before the backend trusts this response, it's checked against a strict Zod schema, so if the AI ever returns malformed JSON, it gets caught and retried instead of crashing the server.
 
 ### 4. Compiling to a Real PDF (No Puppeteer)
 Instead of using a heavy HTML-to-PDF converter, the validated, AI-rewritten data is injected directly into a LaTeX template. The backend sends this to a LaTeX compilation service and gets back a properly typeset PDF — plus the `.tex` source itself, so you can keep editing it on Overleaf if you want full control.
@@ -133,21 +133,3 @@ Open `http://localhost:5173` in your browser — the app should be running.
 - **Executive** — traditional, impact-driven layout for experienced roles
 - **Modern** — two-column skills table with icon-based contact info
 
-## Project Structure
-
-```
-ContextCV/
-├── backend/
-│   ├── controllers/     # auth logic
-│   ├── models/          # User, Profile, VaultEntry schemas
-│   ├── routes/          # auth, profile, vault, generate routes
-│   ├── middleware/       # JWT auth protection
-│   ├── templates/        # LaTeX templates (minimalist, executive, modern)
-│   └── utils/            # Gemini/Groq calls, Zod schema, LaTeX compiler
-└── frontend/
-    └── src/
-        ├── pages/         # Dashboard, Profile, Vault, Generate, etc.
-        ├── components/    # shared UI components
-        ├── context/       # auth context
-        └── api/           # axios instance
-```
